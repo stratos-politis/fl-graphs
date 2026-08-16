@@ -1,0 +1,98 @@
+# Project
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fl-graphs"
+version = "1.0.0"
+description = "Federated Rule Recommendation on Graphs"
+dependencies = [
+    "flwr[simulation]==1.25.0",
+    "torch",
+    "torch_geometric",
+    "numpy",
+    "datasets",
+    "pandas",
+    "tqdm",
+    "scikit-learn",
+    "matplotlib",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.flwr.app]
+publisher = "stratos-politis"
+
+# Simulation
+[tool.flwr.app.config]
+
+# Dataset parameters
+min-rule-freq = 20          # filters out rules that appear less than X times
+resurrect-ghosts = true     # resurrects devices that appear in rules list but not in device list
+
+# Training parameters
+batch-size = 32             # batch size when partitioning data
+local-epochs = 3            # clients' local training epochs per round
+lr = 1e-3                   # clients' initial learning rate
+optimizer = "adam"          # client-side optimizer: "adam" or "sgd"
+weight-decay = 1e-5         # regularization for client optimizer
+loss-fn = "bce"             # training ranking loss: "bce" (1-neg default), "bpr", or "softmax" (infonce)
+num-negatives = 1           # negatives sampled per positive ***raise to 64 for bpr/softmax***
+hard-negative-frac = 0.0    # fraction of hard negatives
+model = "edge"              # "edge" = v2/v3 (edge-type embeddings), "simple" = v1 (no edge types)
+decoder = "mlp"             # link-prediction decoder: "mlp" (v2) or "complex" (v3)
+encoder = "sage"            # node encoder: "sage" (v2) or "compgcn" (v3)
+lr-decay-factor = 1.0       # lr decay factor
+lr-decay-every = 2          # lr decay frequency
+train-holdout-frac = 0.0    # =0 -> eval on separate test set (full cold start LOO), >0 -> eval on train set sample (2nd place)
+strategy = "fedavg"         # "fedavg" or "fedadam"
+max-train-users = 0         # >0 -> subsample train to N users
+
+# Simulation parameters
+num-rounds = 200            # total simulation rounds
+fraction-fit = 1.0          # fraction of clients trained each round (participation)
+fraction-evaluate = 0.0     # no distributed eval (per-round MRR comes from the centralized evaluate_fn)
+min-available-clients = 4   # how many clients the server waits for
+min-fit-clients = 4         # minimum clients trained per round
+min-evaluate-clients = 1    # min clients for distributed eval
+
+# Checkpoint / resume
+checkpoint-every = 1        # save checkpoint every N rounds
+resume-from = ""            # resume from path
+
+[tool.flwr.app.components]
+serverapp = "server_app:app"
+clientapp = "client_app:app"
+
+[tool.flwr.federations]
+default = "cross-silo"
+
+# CENTRALIZED: 1 client, all data
+[tool.flwr.federations.centralized]
+options.num-supernodes = 1
+options.backend.init_args._temp_dir = "/dev/shm/ray_evstpoli"
+options.backend.client_resources.num_cpus = 8
+options.backend.client_resources.num_gpus = 1.0
+
+# CROSS-SILO: 4 clients (silos)
+[tool.flwr.federations.cross-silo]
+options.num-supernodes = 4
+options.backend.init_args._temp_dir = "/dev/shm/ray_evstpoli"
+options.backend.client_resources.num_cpus = 2
+options.backend.client_resources.num_gpus = 0.25
+
+# PSEUDO-CROSS-DEVICE: 2000 clients, 75 graphs each
+[tool.flwr.federations.pseudo-cross-device]
+options.num-supernodes = 2000
+options.backend.init_args._temp_dir = "/dev/shm/ray_evstpoli"
+options.backend.client_resources.num_cpus = 0.5
+options.backend.client_resources.num_gpus = 0.05
+
+# TRUE CROSS-DEVICE: spawn 25k, train 15k/round (undersampling)
+[tool.flwr.federations.cross-device]
+options.num-supernodes = 25000
+options.backend.init_args._temp_dir = "/dev/shm/ray_evstpoli"
+options.backend.client_resources.num_cpus = 0.25
+options.backend.client_resources.num_gpus = 0.04

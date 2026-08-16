@@ -1,0 +1,38 @@
+{
+  "timestamp": "20260626_033433",
+  "versions": {
+    "python": "3.10.12",
+    "platform": "Linux-5.15.0-181-generic-x86_64-with-glibc2.35",
+    "flwr": "1.25.0",
+    "torch": "2.5.1+cu121",
+    "torch_geometric": "2.8.0",
+    "numpy": "2.2.6"
+  },
+  "run_config": {
+    "min-rule-freq": 20,
+    "resurrect-ghosts": true,
+    "batch-size": 32,
+    "local-epochs": 3,
+    "lr": 0.001,
+    "optimizer": "adam",
+    "weight-decay": 1e-05,
+    "lr-decay-factor": 1.0,
+    "lr-decay-every": 2,
+    "train-holdout-frac": 0.0,
+    "strategy": "fedavg",
+    "proximal-mu": 0.0,
+    "max-train-users": 0,
+    "num-rounds": 200,
+    "fraction-fit": 1.0,
+    "fraction-evaluate": 0.0,
+    "min-available-clients": 1,
+    "min-fit-clients": 1,
+    "min-evaluate-clients": 1,
+    "checkpoint-every": 1,
+    "resume-from": ""
+  },
+  "strategy": "fedavg",
+  "device": "cuda",
+  "num_node_features": 16,
+  "num_rule_types": 552
+}

@@ -1,0 +1,5 @@
+{
+  "selection_metric": "mrr",
+  "best_round": 25,
+  "best_mrr": 0.2940476384312393
+}

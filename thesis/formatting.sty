@@ -1,0 +1,206 @@
+\ProvidesPackage{formatting}
+
+%  Language
+\usepackage{polyglossia}
+\setmainlanguage{greek}
+\setotherlanguage[variant=british]{english}
+
+%  Fonts
+\usepackage{fontspec}
+
+% Serif -- body text
+\setmainfont{IBMPlexSerif}[
+    Path = ./assets/fonts/,
+    Extension = .otf,
+    UprightFont = *-Text,
+    BoldFont = *-Bold,
+    ItalicFont = *-TextItalic,
+    BoldItalicFont = *-BoldItalic,
+    Ligatures = TeX
+]
+
+% Sans -- titles
+\setsansfont{IBMPlexSans}[
+    Path = ./assets/fonts/,
+    Extension = .otf,
+    UprightFont = *-Text,
+    BoldFont = *-Bold,
+    ItalicFont = *-TextItalic,
+    BoldItalicFont = *-BoldItalic,
+    Ligatures = TeX
+]
+
+% Mono -- code / identifiers
+\setmonofont{IBMPlexMono}[
+    Path = ./assets/fonts/,
+    Extension = .otf,
+    UprightFont = *-Text,
+    BoldFont = *-Bold,
+    ItalicFont = *-TextItalic,
+    BoldItalicFont = *-BoldItalic,
+    Scale = 0.9,
+    Script = Latin
+]
+\newfontfamily\greekfonttt{IBMPlexMono}[
+    Path = ./assets/fonts/,
+    Extension = .otf,
+    UprightFont = *-Text,
+    BoldFont = *-Bold,
+    ItalicFont = *-TextItalic,
+    BoldItalicFont = *-BoldItalic,
+    Scale = 0.9,
+    Script = Latin,
+    NFSSFamily = greektt
+]
+
+% Condensed sans -- figure legends, table cells
+\newfontfamily\condensedfont{IBMPlexSansCondensed}[
+    Path = ./assets/fonts/,
+    Extension = .otf,
+    UprightFont = *-Text,
+    BoldFont = *-Bold,
+    ItalicFont = *-TextItalic,
+    BoldItalicFont = *-BoldItalic
+]
+
+%  Math
+\usepackage{amsmath}
+\usepackage{unicode-math}
+\setmathfont{IBMPlexMath-Regular.otf}[
+    Path = ./assets/fonts/
+]
+
+%  Colours
+\usepackage[dvipsnames]{xcolor}
+
+%  Page geometry
+\usepackage{geometry}
+\geometry{top=3.5cm, bottom=3.5cm, inner=2.2cm, outer=2.2cm}
+\raggedbottom
+
+%  Paragraphs
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{12pt}
+\linespread{1.2}
+
+\usepackage{microtype}
+\tolerance=1000
+\emergencystretch=2em
+\finalhyphendemerits=50000
+
+%  Headings
+\usepackage{titlesec}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+\titlespacing*{\section}{0pt}{4.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titleformat{\part}{\sffamily\Huge\bfseries}{\thepart.}{0.7em}{}
+\titleformat{\chapter}[display]{\sffamily\huge\bfseries}{\chaptertitlename\ \thechapter}{0pt}{\Huge}
+\titleformat{\section}{\sffamily\Large\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries}{\thesubsubsection}{0.7em}{}
+
+%  Headers & footers
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\fancypagestyle{fancy}{
+    \fancyhf{}
+    \fancyhead[LE,RO]{\sffamily\bfseries\leftmark}
+    \fancyfoot[LE,RO]{\sffamily\thepage}
+}
+\renewcommand{\chaptermark}[1]{%
+    \markboth{ΚΕΦ. \thechapter.\ #1}{}%
+}
+\renewcommand{\sectionmark}[1]{}
+\fancypagestyle{bibstyle}{
+    \fancyhf{}
+    \fancyhead[LE,RO]{\sffamily\bfseriesΒΙΒΛΙΟΓΡΑΦΙΑ}
+    \fancyfoot[LE,RO]{\sffamily\thepage}
+    \renewcommand{\headrulewidth}{0.4pt}
+}
+
+%  Figures, tables & captions
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\setlength{\textfloatsep}{26pt plus 4pt minus 4pt}
+\setlength{\intextsep}{22pt plus 4pt minus 4pt}
+\setlength{\floatsep}{20pt plus 4pt minus 4pt}
+
+\usepackage{caption}
+\captionsetup{format=hang, font={small}, labelfont={bf}, skip=15pt plus 3pt minus 2pt, justification=justified, singlelinecheck=false}
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{tabular}{\condensedfont}
+
+\DeclareRobustCommand{\ident}[1]{\texttt{\detokenize{#1}}}
+
+%  Lists
+\usepackage[inline]{enumitem}
+
+%  Bibliography  (biblatex + biber)
+\usepackage[backend=biber, style=numeric, sorting=none, backref=true, backrefstyle=three, urldate=short]{biblatex}
+\addbibresource{./bibliography/sources.bib}
+
+\setcounter{biburlnumpenalty}{100}
+\setcounter{biburlucpenalty}{100}
+\setcounter{biburllcpenalty}{100}
+\biburlbigskip=0mu\relax
+
+%  Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=NavyBlue,
+    citecolor=NavyBlue,
+    urlcolor=NavyBlue,
+}
+\pdfstringdefDisableCommands{\def\textgreek#1{#1}}
+\urlstyle{sf}
+
+\renewcommand*{\mkbibbrackets}[1]{{\normalfont[#1]}}
+\DefineBibliographyStrings{english}{
+  backrefpage={σελ. },
+  backrefpages={σελ. },
+  urlseen={accessed}
+}
+\renewcommand*{\finentrypunct}{}
+\usepackage{xpatch}
+\DeclareFieldFormat{backrefparens}{\addperiod\ \raisebox{3pt}{\scriptsize{#1}}}
+\xpatchbibmacro{pageref}{parens}{backrefparens}{}{}
+
+%  Greek names for \autoref
+\def\chapterautorefname{Κεφάλαιο}
+\def\sectionautorefname{Ενότητα}
+\def\subsectionautorefname{Ενότητα}
+\def\subsubsectionautorefname{Ενότητα}
+\def\figureautorefname{Σχήμα}
+\def\tableautorefname{Πίνακας}
+\def\equationautorefname{Εξίσωση}
+
+%  Table of contents / figures / tables
+\usepackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\Huge\bfseries\sffamily}
+\renewcommand{\cftchapfont}{\bfseries\sffamily}
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftchappagefont}{\bfseries\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\renewcommand{\cftsubsecpagefont}{\sffamily}
+\renewcommand{\cftdotsep}{1.5}
+\renewcommand{\cftloftitlefont}{\Huge\bfseries\sffamily}
+\renewcommand{\cftfigfont}{\sffamily}
+\renewcommand{\cftfigpagefont}{\sffamily}
+\renewcommand{\cftlottitlefont}{\Huge\bfseries\sffamily}
+\renewcommand{\cfttabfont}{\sffamily}
+\renewcommand{\cfttabpagefont}{\sffamily}
+\setlength{\cftbeforetoctitleskip}{-30pt}
+\setlength{\cftbeforeloftitleskip}{-30pt}
+\setlength{\cftbeforelottitleskip}{-30pt}
+\setlength{\cftaftertoctitleskip}{6pt}
+\setlength{\cftafterloftitleskip}{24pt}
+\setlength{\cftafterlottitleskip}{24pt}

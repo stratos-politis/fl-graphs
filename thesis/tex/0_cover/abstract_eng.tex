@@ -1,0 +1,12 @@
+\begin{english}
+
+\begin{abstract}
+The rapid proliferation of Internet of Things (IoT) devices has made the recommendation of automations (rules of the form "if A happens, then perform B") an increasingly important problem. The data required to train such a system is, however, inherently sensitive, which makes its centralized collection problematic. This thesis studies the problem of IoT rule recommendation in a federated setting, taking as its starting point Wyze's open competition and the second-place solution as a reference baseline.
+
+The problem is reformulated as federated link prediction over per-user graphs, and three successive model versions of increasing complexity are developed, culminating in a relational model that combines a CompGCN encoder, a ComplEx decoder, and an InfoNCE loss. This model improves upon the centralized reference solution by 71\% in Mean Reciprocal Rank (MRR). A systematic evaluation across four orchestration scenarios (centralized, cross-silo, and two cross-device variants) reveals that the optimal model choice depends on the type of orchestration: the strongest model dominates everywhere except the most distributed scenario, where a simpler version proves more robust.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} Federated Learning, Graph Neural Networks, Recommender System, Rule Recommendation, Internet of Things, Link Prediction, Non-IID Data
+\end{abstract}
+
+\end{english}
